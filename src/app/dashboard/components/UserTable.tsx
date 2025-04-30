@@ -9,7 +9,6 @@ import {
   Typography,
   Box,
   Pagination,
-  Avatar,
   IconButton,
   useMediaQuery,
 } from "@mui/material";
@@ -17,6 +16,7 @@ import { User } from "@/types/user";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@mui/material/styles";
+import AvatarWithFallback from "@/components/ui/AvatarWithFallback";
 
 type Props = {
   users: User[];
@@ -65,7 +65,7 @@ export default function UserTable({
               <TableRow key={user.id}>
                 <TableCell>
                   <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar src={user.avatar} alt={user.first_name} />
+                    <AvatarWithFallback src={user.avatar} alt={user.first_name} />
                     <Typography>
                       {user.first_name} {user.last_name}
                     </Typography>
