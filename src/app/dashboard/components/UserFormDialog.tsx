@@ -77,6 +77,7 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
       <DialogContent>
         <Stack spacing={2} mt={1}>
           <TextField
+            name="first_name"
             label="First Name"
             fullWidth
             value={firstName}
@@ -88,6 +89,7 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
             autoFocus
           />
           <TextField
+            name="job"
             label="Job"
             fullWidth
             value={job}
