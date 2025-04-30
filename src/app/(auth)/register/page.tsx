@@ -21,14 +21,14 @@ export default function RegisterPage() {
   return (
     <Box
       component="main"
-      sx={{
+      sx={theme => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
-        backgroundColor: "grey.100",
+        backgroundColor: theme.palette.mode === "dark" ? "#0f1214" : "grey.100",
         padding: 2,
-      }}
+      })}
     >
       <Card sx={{ width: "100%", maxWidth: 400, padding: 2, borderRadius: 2 }}>
         <CardContent
