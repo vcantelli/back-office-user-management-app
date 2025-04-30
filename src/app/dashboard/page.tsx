@@ -8,7 +8,6 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { User } from "@/types/user";
-import Header from "@/components/ui/Header";
 
 export default function DashboardPage() {
   const {
@@ -32,54 +31,51 @@ export default function DashboardPage() {
   };
 
   return (
-    <>
-      <Header />
-      <Box p={3}>
-        <Box display="flex" justifyContent="flex-end" mb={2}>
-          <Button
-            aria-label="Add user"
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={handleAdd}
-          >
-            Add User
-          </Button>
-        </Box>
-
-        {!loading && (
-          <UserTable
-            users={users}
-            page={page}
-            totalPages={totalPages}
-            onEdit={user => {
-              setEditingUser(user);
-              setOpenForm(true);
-            }}
-            onDelete={id => setDeletingUserId(id)}
-            onPageChange={setPage}
-          />
-        )}
-
-        {loading && (
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <CircularProgress />
-          </Box>
-        )}
-
-        <UserFormDialog
-          open={openForm}
-          onClose={() => setOpenForm(false)}
-          onSave={handleSave}
-          editingUser={editingUser}
-        />
-
-        <ConfirmDialog
-          open={!!deletingUserId}
-          onClose={() => setDeletingUserId(null)}
-          onConfirm={handleDelete}
-        />
+    <Box p={3}>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button
+          aria-label="Add user"
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAdd}
+        >
+          Add User
+        </Button>
       </Box>
-    </>
+
+      {!loading && (
+        <UserTable
+          users={users}
+          page={page}
+          totalPages={totalPages}
+          onEdit={user => {
+            setEditingUser(user);
+            setOpenForm(true);
+          }}
+          onDelete={id => setDeletingUserId(id)}
+          onPageChange={setPage}
+        />
+      )}
+
+      {loading && (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      )}
+
+      <UserFormDialog
+        open={openForm}
+        onClose={() => setOpenForm(false)}
+        onSave={handleSave}
+        editingUser={editingUser}
+      />
+
+      <ConfirmDialog
+        open={!!deletingUserId}
+        onClose={() => setDeletingUserId(null)}
+        onConfirm={handleDelete}
+      />
+    </Box>
   );
 }

@@ -1,13 +1,20 @@
 "use client";
 
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, useTheme } from "@mui/material";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteCookie } from "cookies-next";
 
-export default function Header() {
+type Props = {
+  toggleTheme: () => void;
+};
+
+export default function Header({ toggleTheme }: Props) {
   const [userName, setUserName] = useState("User");
   const router = useRouter();
+  const theme = useTheme();
 
   useEffect(() => {
     const cookieValue = document.cookie
@@ -42,6 +49,9 @@ export default function Header() {
           >
             Logout
           </Button>
+          <IconButton onClick={toggleTheme} color="inherit" aria-label="Toggle theme">
+            {theme.palette.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
