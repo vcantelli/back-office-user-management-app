@@ -43,7 +43,11 @@ export default function LoginPage() {
             Sign In
           </Typography>
 
-          {state.errors?.general && <Alert severity="error">{state.errors.general[0]}</Alert>}
+          {state.errors?.general && (
+            <Alert severity="error" role="alert">
+              {state.errors.general[0]}
+            </Alert>
+          )}
 
           <form
             action={formAction}

@@ -35,7 +35,13 @@ export default function DashboardPage() {
       <Header />
       <Box p={3}>
         <Box display="flex" justifyContent="flex-end" mb={2}>
-          <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleAdd}>
+          <Button
+            aria-label="Add user"
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+          >
             Add User
           </Button>
         </Box>

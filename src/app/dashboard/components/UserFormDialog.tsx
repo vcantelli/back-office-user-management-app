@@ -42,8 +42,14 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{editingUser ? "Edit User" : "Create User"}</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="user-dialog-title"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="user-dialog-title">{editingUser ? "Edit User" : "Create User"}</DialogTitle>
 
       <DialogContent>
         <Stack spacing={2} mt={1}>

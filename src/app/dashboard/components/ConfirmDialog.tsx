@@ -17,10 +17,17 @@ type Props = {
 
 export default function ConfirmDialog({ open, onClose, onConfirm }: Props) {
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>Confirm Deletion</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="confirm-dialog-title"
+      aria-describedby="confirm-dialog-description"
+      fullWidth
+      maxWidth="xs"
+    >
+      <DialogTitle id="confirm-dialog-title">Confirm Deletion</DialogTitle>
       <DialogContent>
-        <Typography>
+        <Typography id="confirm-dialog-description">
           Are you sure you want to delete this user? This action cannot be undone.
         </Typography>
       </DialogContent>

@@ -43,7 +43,11 @@ export default function RegisterPage() {
             Register
           </Typography>
 
-          {state.errors?.general && <Alert severity="error">{state.errors.general[0]}</Alert>}
+          {state.errors?.general && (
+            <Alert severity="error" role="alert">
+              {state.errors.general[0]}
+            </Alert>
+          )}
 
           <form
             action={formAction}
@@ -98,6 +102,7 @@ export default function RegisterPage() {
               helperText={state.errors?.confirmPassword ? state.errors.confirmPassword[0] : ""}
               fullWidth
               required
+              aria-invalid={!!state.errors?.confirmPassword}
               aria-describedby={state.errors?.confirmPassword ? "confirmPassword-error" : undefined}
             />
 
