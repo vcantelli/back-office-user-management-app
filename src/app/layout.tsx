@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="en">
-      <body>
+      <body data-theme={mode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <a href="#main" className="skip-link">
