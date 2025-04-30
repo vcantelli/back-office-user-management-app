@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchUsers, createUser, updateUser, deleteUser } from "@/lib/usersApi";
 import { User } from "@/types/user";
 
@@ -8,68 +8,74 @@ export function useUserManager() {
   const [users, setUsers] = useState<User[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [openForm, setOpenForm] = useState(false);
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 
-  const loadPage = (targetPage: number) => {
-    setPage(targetPage);
-    startTransition(async () => {
-      try {
-        const { data, total_pages } = await fetchUsers(targetPage);
-        setUsers(data);
-        setTotalPages(total_pages);
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch users:", err);
-        setError("Failed to load users. Please try again.");
-        setUsers([]);
-        setTotalPages(1);
-      }
-    });
+  const loadUsers = useCallback(async () => {
+    try {
+      const { data, total_pages } = await fetchUsers(page);
+      setUsers(data);
+      setTotalPages(total_pages);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
+  const handleAdd = () => {
+    setEditingUser(null);
+    setOpenForm(true);
+  };
+
+  const handleEdit = (user: User) => {
+    setEditingUser(user);
+    setOpenForm(true);
   };
 
   const handleSave = async (user: Omit<User, "id">, id?: string) => {
     try {
       if (id) {
-        await updateUser(id, user);
+        const updated = await updateUser(id, user);
+        console.log("Updated:", updated);
       } else {
-        await createUser(user);
+        const created = await createUser(user);
+        console.log("Created:", created);
       }
-    } catch (err) {
-      console.error("Failed to save user:", err);
-    } finally {
-      loadPage(1);
+      await loadUsers();
+    } catch (error) {
+      console.error("Save error:", error);
     }
   };
 
   const handleDelete = async () => {
     if (!deletingUserId) return;
-
     try {
-      await deleteUser(deletingUserId);
-    } catch (err) {
-      console.error("Failed to delete user:", err);
-    } finally {
+      const res = await deleteUser(deletingUserId);
+      console.log("Deleted:", res);
       setDeletingUserId(null);
-      loadPage(1);
+      await loadUsers();
+    } catch (error) {
+      console.error("Delete error:", error);
     }
   };
-
-  useEffect(() => {
-    loadPage(1);
-  }, []);
 
   return {
     users,
     page,
     totalPages,
-    isPending,
-    error,
-    setPage: loadPage,
+    openForm,
+    editingUser,
+    deletingUserId,
+    setOpenForm,
+    setDeletingUserId,
+    setPage,
+    handleAdd,
+    handleEdit,
     handleSave,
     handleDelete,
-    deletingUserId,
-    setDeletingUserId,
   };
 }
