@@ -28,7 +28,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {children}
+          <a href="#main" className="skip-link">
+            Skip to main content
+          </a>
+          <main id="main" tabIndex={-1}>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

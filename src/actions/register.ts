@@ -1,21 +1,28 @@
 "use server";
 
-import { loginSchema } from "@/schemas/loginSchema";
+import { registerSchema } from "@/schemas/registerSchema";
 import { cookies } from "next/headers";
 
-type LoginState = {
+type RegisterState = {
   success: boolean;
   errors: {
+    name?: string[];
     email?: string[];
     password?: string[];
+    confirmPassword?: string[];
     general?: string[];
   };
 };
 
-export async function login(_prevState: LoginState, formData: FormData): Promise<LoginState> {
-  const parsed = loginSchema.safeParse({
+export async function register(
+  _prevState: RegisterState,
+  formData: FormData,
+): Promise<RegisterState> {
+  const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+    name: formData.get("name"),
   });
 
   if (!parsed.success) {
@@ -33,7 +40,7 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
   }
 
   try {
-    const response = await fetch("https://reqres.in/api/login", {
+    const response = await fetch("https://reqres.in/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +55,7 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
           return {
             success: false,
             errors: {
-              general: ["Invalid credentials. Please try again."],
+              general: ["Invalid registration. Please check your information."],
             },
           };
         case 401:

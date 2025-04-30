@@ -6,8 +6,10 @@ export function middleware(request: NextRequest) {
 
   const isAuth = Boolean(authToken);
   const isLoginPage = request.nextUrl.pathname === "/login";
+  const isRegisterPage = request.nextUrl.pathname === "/register";
+  const isRobots = request.nextUrl.pathname === "/robots.txt";
 
-  if (!isAuth && !isLoginPage) {
+  if (!isAuth && !isLoginPage && !isRegisterPage && !isRobots) {
     const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
