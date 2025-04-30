@@ -79,10 +79,16 @@ export async function register(
 
     (await cookies()).set("auth_token", data.token, {
       path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     });
 
     (await cookies()).set("user_name", parsed.data.name, {
       path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     });
 
     return {

@@ -72,6 +72,9 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
 
     (await cookies()).set("auth_token", data.token, {
       path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     });
 
     return {
