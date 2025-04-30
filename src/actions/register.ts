@@ -1,7 +1,7 @@
 "use server";
 
+import { setSession, setUserName } from "@/lib/auth";
 import { registerSchema } from "@/schemas/registerSchema";
-import { cookies } from "next/headers";
 
 type RegisterState = {
   success: boolean;
@@ -77,19 +77,8 @@ export async function register(
 
     const data = await response.json();
 
-    (await cookies()).set("auth_token", data.token, {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
-
-    (await cookies()).set("user_name", parsed.data.name, {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    await setSession(data.token);
+    await setUserName(parsed.data.name);
 
     return {
       success: true,

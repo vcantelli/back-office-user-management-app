@@ -1,7 +1,7 @@
 "use server";
 
+import { setSession } from "@/lib/auth";
 import { loginSchema } from "@/schemas/loginSchema";
-import { cookies } from "next/headers";
 
 type LoginState = {
   success: boolean;
@@ -70,12 +70,7 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
 
     const data = await response.json();
 
-    (await cookies()).set("auth_token", data.token, {
-      path: "/",
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    await setSession(data.token);
 
     return {
       success: true,
