@@ -5,19 +5,18 @@ import { useActionState, useTransition } from "react";
 import Link from "next/link";
 import { Box, Card, CardContent, TextField, Typography, Alert } from "@mui/material";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [state, formAction] = useActionState(register, { success: false, errors: {} });
   const [, startTransition] = useTransition();
 
   useEffect(() => {
     if (state.success) {
-      router.push("/dashboard");
+      redirect("/dashboard");
     }
-  }, [state.success, router]);
+  }, [state.success]);
 
   return (
     <Box
@@ -43,7 +42,11 @@ export default function RegisterPage() {
             Register
           </Typography>
 
-          {state.errors?.general && <Alert severity="error">{state.errors.general[0]}</Alert>}
+          {state.errors?.general && (
+            <Alert severity="error" role="alert">
+              {state.errors.general[0]}
+            </Alert>
+          )}
 
           <form
             action={formAction}
@@ -98,6 +101,7 @@ export default function RegisterPage() {
               helperText={state.errors?.confirmPassword ? state.errors.confirmPassword[0] : ""}
               fullWidth
               required
+              aria-invalid={!!state.errors?.confirmPassword}
               aria-describedby={state.errors?.confirmPassword ? "confirmPassword-error" : undefined}
             />
 

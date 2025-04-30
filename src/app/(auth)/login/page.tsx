@@ -5,7 +5,7 @@ import { useActionState, useTransition } from "react";
 import Link from "next/link";
 import { Box, Card, CardContent, TextField, Typography, Alert } from "@mui/material";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export default function LoginPage() {
@@ -14,10 +14,14 @@ export default function LoginPage() {
   const [, startTransition] = useTransition();
 
   useEffect(() => {
+    router.prefetch("/dashboard");
+  }, [router]);
+
+  useEffect(() => {
     if (state.success) {
-      router.push("/dashboard");
+      redirect("/dashboard");
     }
-  }, [state.success, router]);
+  }, [state.success]);
 
   return (
     <Box
@@ -43,7 +47,11 @@ export default function LoginPage() {
             Sign In
           </Typography>
 
-          {state.errors?.general && <Alert severity="error">{state.errors.general[0]}</Alert>}
+          {state.errors?.general && (
+            <Alert severity="error" role="alert">
+              {state.errors.general[0]}
+            </Alert>
+          )}
 
           <form
             action={formAction}
