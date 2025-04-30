@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactNode, useEffect, useState } from "react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { lightTheme, darkTheme } from "@/styles/theme";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -32,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             Skip to main content
           </a>
           <main id="main" tabIndex={-1}>
-            {children}
+            <ErrorBoundary>{children}</ErrorBoundary>
           </main>
         </ThemeProvider>
       </body>
