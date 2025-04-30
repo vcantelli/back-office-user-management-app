@@ -1,5 +1,7 @@
 "use server";
 
+import { fetchWithAuth } from "./fetchWithAuth";
+
 const apiKey = process.env.REQRES_API_KEY;
 if (!apiKey) throw new Error("Missing REQRES_API_KEY environment variable");
 
@@ -10,7 +12,7 @@ const headers = {
 
 export async function loginRequest(email: string, password: string) {
   try {
-    const res = await fetch("https://reqres.in/api/login", {
+    const res = await fetchWithAuth("https://reqres.in/api/login", {
       method: "POST",
       headers,
       body: JSON.stringify({ email, password }),
@@ -35,7 +37,7 @@ export async function loginRequest(email: string, password: string) {
 
 export async function registerRequest(email: string, password: string) {
   try {
-    const res = await fetch("https://reqres.in/api/register", {
+    const res = await fetchWithAuth("https://reqres.in/api/register", {
       method: "POST",
       headers,
       body: JSON.stringify({ email, password }),
