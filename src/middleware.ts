@@ -1,22 +1,15 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const authToken = request.cookies.get("auth_token")?.value;
+  const token = request.cookies.get("auth_token")?.value;
 
-  const isAuth = Boolean(authToken);
-  const isLoginPage = request.nextUrl.pathname === "/login";
-  const isRegisterPage = request.nextUrl.pathname === "/register";
-  const isRobots = request.nextUrl.pathname === "/robots.txt";
-
-  if (!isAuth && !isLoginPage && !isRegisterPage && !isRobots) {
-    const loginUrl = new URL("/login", request.url);
-    return NextResponse.redirect(loginUrl);
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|login).*)"],
+  matcher: ["/((?!_next|favicon.ico|robots.txt|login|register).*)"],
 };
