@@ -5,12 +5,17 @@ import { useActionState, useTransition } from "react";
 import Link from "next/link";
 import { Box, Card, CardContent, TextField, Typography, Alert } from "@mui/material";
 import { useEffect } from "react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [state, formAction] = useActionState(login, { success: false, errors: {} });
   const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    router.prefetch("/dashboard");
+  }, [router]);
 
   useEffect(() => {
     if (state.success) {
