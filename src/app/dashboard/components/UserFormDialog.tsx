@@ -21,23 +21,23 @@ type Props = {
 
 export default function UserFormDialog({ open, onClose, onSave, editingUser }: Props) {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [job, setJob] = useState("");
 
   useEffect(() => {
     if (editingUser) {
       setFirstName(editingUser.first_name);
-      setLastName(editingUser.last_name);
-      setEmail(editingUser.email);
+      setJob(editingUser.job);
     } else {
       setFirstName("");
-      setLastName("");
-      setEmail("");
+      setJob("");
     }
   }, [editingUser]);
 
   const handleSubmit = () => {
-    onSave({ first_name: firstName, last_name: lastName, email, avatar: "" }, editingUser?.id);
+    onSave(
+      { first_name: firstName, job: job, email: "", avatar: "", last_name: "" },
+      editingUser?.id,
+    );
     onClose();
   };
 
@@ -54,19 +54,7 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
             onChange={e => setFirstName(e.target.value)}
             autoFocus
           />
-          <TextField
-            label="Last Name"
-            fullWidth
-            value={lastName}
-            onChange={e => setLastName(e.target.value)}
-          />
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
+          <TextField label="Job" fullWidth value={job} onChange={e => setJob(e.target.value)} />
         </Stack>
       </DialogContent>
 
