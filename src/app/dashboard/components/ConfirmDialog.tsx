@@ -7,7 +7,9 @@ import {
   DialogActions,
   Button,
   Typography,
+  CircularProgress,
 } from "@mui/material";
+import { useTransition } from "react";
 
 type Props = {
   open: boolean;
@@ -16,6 +18,14 @@ type Props = {
 };
 
 export default function ConfirmDialog({ open, onClose, onConfirm }: Props) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = () => {
+    startTransition(() => {
+      onConfirm();
+    });
+  };
+
   return (
     <Dialog
       open={open}
@@ -35,8 +45,8 @@ export default function ConfirmDialog({ open, onClose, onConfirm }: Props) {
         <Button onClick={onClose} variant="outlined">
           Cancel
         </Button>
-        <Button onClick={onConfirm} variant="contained" color="error">
-          Delete
+        <Button onClick={handleDelete} variant="contained" color="error" disabled={isPending}>
+          {isPending ? <CircularProgress size={20} color="inherit" /> : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -11,14 +11,18 @@ export function useUserManager() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [openForm, setOpenForm] = useState(false);
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const loadUsers = useCallback(async () => {
     try {
+      setLoading(true);
       const { data, total_pages } = await fetchUsers(page);
       setUsers(data);
       setTotalPages(total_pages);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+    } finally {
+      setLoading(false);
     }
   }, [page]);
 
@@ -70,6 +74,7 @@ export function useUserManager() {
     openForm,
     editingUser,
     deletingUserId,
+    loading,
     setOpenForm,
     setDeletingUserId,
     setPage,

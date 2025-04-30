@@ -8,8 +8,9 @@ import {
   TextField,
   Button,
   Stack,
+  CircularProgress,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { User } from "@/types/user";
 
 type Props = {
@@ -22,6 +23,7 @@ type Props = {
 export default function UserFormDialog({ open, onClose, onSave, editingUser }: Props) {
   const [firstName, setFirstName] = useState("");
   const [job, setJob] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (editingUser) {
@@ -34,11 +36,13 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
   }, [editingUser]);
 
   const handleSubmit = () => {
-    onSave(
-      { first_name: firstName, job: job, email: "", avatar: "", last_name: "" },
-      editingUser?.id,
-    );
-    onClose();
+    startTransition(() => {
+      onSave(
+        { first_name: firstName, job: job, email: "", avatar: "", last_name: "" },
+        editingUser?.id,
+      );
+      onClose();
+    });
   };
 
   return (
@@ -68,8 +72,8 @@ export default function UserFormDialog({ open, onClose, onSave, editingUser }: P
         <Button onClick={onClose} variant="outlined">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} variant="contained">
-          {editingUser ? "Update" : "Create"}
+        <Button onClick={handleSubmit} variant="contained" disabled={isPending}>
+          {isPending ? <CircularProgress size={20} /> : editingUser ? "Update" : "Create"}
         </Button>
       </DialogActions>
     </Dialog>

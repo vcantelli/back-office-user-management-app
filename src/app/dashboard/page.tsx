@@ -4,7 +4,7 @@ import { useUserManager } from "@/hooks/useUserManager";
 import UserTable from "./components/UserTable";
 import UserFormDialog from "./components/UserFormDialog";
 import ConfirmDialog from "./components/ConfirmDialog";
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { User } from "@/types/user";
@@ -15,6 +15,7 @@ export default function DashboardPage() {
     users,
     page,
     totalPages,
+    loading,
     setPage,
     handleSave,
     handleDelete,
@@ -46,17 +47,25 @@ export default function DashboardPage() {
           </Button>
         </Box>
 
-        <UserTable
-          users={users}
-          page={page}
-          totalPages={totalPages}
-          onEdit={user => {
-            setEditingUser(user);
-            setOpenForm(true);
-          }}
-          onDelete={id => setDeletingUserId(id)}
-          onPageChange={setPage}
-        />
+        {!loading && (
+          <UserTable
+            users={users}
+            page={page}
+            totalPages={totalPages}
+            onEdit={user => {
+              setEditingUser(user);
+              setOpenForm(true);
+            }}
+            onDelete={id => setDeletingUserId(id)}
+            onPageChange={setPage}
+          />
+        )}
+
+        {loading && (
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Box>
+        )}
 
         <UserFormDialog
           open={openForm}
