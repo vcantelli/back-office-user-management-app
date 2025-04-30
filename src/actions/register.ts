@@ -81,6 +81,10 @@ export async function register(
       path: "/",
     });
 
+    (await cookies()).set("user_name", parsed.data.name, {
+      path: "/",
+    });
+
     return {
       success: true,
       errors: {},
