@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
+  images: {
+    domains: ["reqres.in"],
+  },
   async headers() {
     return [
       {
@@ -28,7 +31,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://reqres.in; connect-src 'self';",
           },
         ],
       },
