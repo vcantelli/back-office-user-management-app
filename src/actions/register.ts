@@ -1,6 +1,7 @@
 "use server";
 
 import { setSession, setUserName } from "@/lib/auth";
+import { registerRequest } from "@/lib/authApi";
 import { registerSchema } from "@/schemas/registerSchema";
 
 type RegisterState = {
@@ -34,49 +35,8 @@ export async function register(
 
   const { email, password } = parsed.data;
 
-  const apiKey = process.env.REQRES_API_KEY;
-  if (!apiKey) {
-    throw new Error("Missing REQRES_API_KEY environment variable");
-  }
-
   try {
-    const response = await fetch("https://reqres.in/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      switch (response.status) {
-        case 400:
-          return {
-            success: false,
-            errors: {
-              general: ["Invalid registration. Please check your information."],
-            },
-          };
-        case 401:
-          return {
-            success: false,
-            errors: {
-              general: ["Authentication error. Please check API key configuration."],
-            },
-          };
-        default:
-          return {
-            success: false,
-            errors: {
-              general: ["An unexpected error occurred. Please try again later."],
-            },
-          };
-      }
-    }
-
-    const data = await response.json();
-
+    const data = await registerRequest(email, password);
     await setSession(data.token);
     await setUserName(parsed.data.name);
 
@@ -84,11 +44,11 @@ export async function register(
       success: true,
       errors: {},
     };
-  } catch {
+  } catch (error) {
     return {
       success: false,
       errors: {
-        general: ["Something went wrong. Please try again."],
+        general: [(error as Error).message],
       },
     };
   }
